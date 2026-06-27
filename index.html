@@ -387,6 +387,8 @@
             <option value="yearly">Jahresverlauf (Anteil je Monat)</option>
             <option value="daily">Tageswerte je String</option>
           </select>
+          <span class="control-label" id="labelPVYear" style="display:none">Jahr:</span>
+          <select id="selPVYear" onchange="renderPVStrings()" style="display:none"></select>
           <span class="control-label" id="labelPVMonth" style="display:none">Monat:</span>
           <select id="selPVMonth" onchange="renderPVStrings()" style="display:none"></select>
         </div>
@@ -850,6 +852,15 @@ function initPVSelects() {
     sel.innerHTML += `<option value="${m}">${MONTHS[parseInt(mo)-1]} ${yr}</option>`;
   });
   if (months.length) sel.value = months[months.length - 1];
+
+  // Jahr-Auswahl fuer den Jahresverlauf (Jan–Dez) + Option "Alle Jahre (Ø)"
+  const yearSel = document.getElementById('selPVYear');
+  if (yearSel) {
+    const years = [...new Set(months.map(m => m.split('-')[0]))].sort();
+    yearSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('') +
+      `<option value="avg">Alle Jahre (Ø)</option>`;
+    if (years.length) yearSel.value = years[years.length - 1];   // Default: aktuellstes Jahr
+  }
 }
 
 function renderPVStrings() {
@@ -906,12 +917,16 @@ function renderPVStrings() {
   document.getElementById('pvLegend').innerHTML = PV_STRINGS.map(s =>
     `<div class="legend-item"><div class="legend-dot" style="background:${s.color}"></div> ${s.label}</div>`).join('');
 
-  // Verlauf: Jahresverlauf (Anteil/Monat) oder Tagesansicht
+  // Verlauf: Jahresverlauf (Jan–Dez) oder Tagesansicht
   const mode = document.getElementById('selPVMode').value;
   const monthSel = document.getElementById('selPVMonth');
   const monthLabel = document.getElementById('labelPVMonth');
+  const yearSel = document.getElementById('selPVYear');
+  const yearLabel = document.getElementById('labelPVYear');
 
   if (mode === 'daily') {
+    yearSel.style.display = 'none';
+    yearLabel.style.display = 'none';
     monthSel.style.display = 'inline-block';
     monthLabel.style.display = 'inline';
     if (!monthSel.value || !keys.includes(monthSel.value)) monthSel.value = keys[keys.length - 1];
@@ -931,26 +946,42 @@ function renderPVStrings() {
       options: { ...CHART_DEFAULTS, scales: { ...CHART_DEFAULTS.scales, x: { ...CHART_DEFAULTS.scales.x, stacked: true }, y: { ...CHART_DEFAULTS.scales.y, stacked: true } }, plugins: { ...CHART_DEFAULTS.plugins, legend: { display: true, labels: { color: '#7a8499', font: { family: 'DM Mono', size: 11 } } } } }
     });
   } else {
+    // Jahresverlauf: feste Jan–Dez-Achse; gewaehltes Jahr oder Durchschnitt aller Jahre
     monthSel.style.display = 'none';
     monthLabel.style.display = 'none';
-    const labels = keys.map(fmt);
-    document.getElementById('pvChartTitle').textContent = 'Anteil je String pro Monat (%) – zeigt saisonale Verschiebung Wiese ↔ Wand';
+    yearSel.style.display = 'inline-block';
+    yearLabel.style.display = 'inline';
+    const sel = yearSel.value || (yearSel.options[0] && yearSel.options[0].value);
+
+    // Pro Kalendermonat (1..12) die kWh-Summe je String (bei "avg" ueber alle Jahre aggregiert)
+    const monthlySums = MONTHS.map((_, i) => {
+      const mo = String(i + 1).padStart(2, '0');
+      const matchKeys = keys.filter(k => { const [y, m] = k.split('-'); return m === mo && (sel === 'avg' || y === sel); });
+      if (!matchKeys.length) return null;
+      const sums = { pv1: 0, pv2: 0, pv3: 0, pv4: 0 };
+      matchKeys.forEach(k => { const d = DATA.anker_monthly[k]; sums.pv1 += d.pv1; sums.pv2 += d.pv2; sums.pv3 += d.pv3; sums.pv4 += d.pv4; });
+      return sums;
+    });
+
+    document.getElementById('pvChartTitle').textContent = sel === 'avg'
+      ? 'Anteil je String – Ø alle Jahre (%) – zeigt saisonale Verschiebung Wiese ↔ Wand'
+      : `Anteil je String pro Monat ${sel} (%) – zeigt saisonale Verschiebung Wiese ↔ Wand`;
 
     destroyChart('pvStrings');
     charts['pvStrings'] = new Chart(document.getElementById('chartPVStrings'), {
       type: 'bar',
       data: {
-        labels,
+        labels: MONTHS,
         datasets: PV_STRINGS.map(s => ({
           label: s.label,
-          data: keys.map(k => { const m = DATA.anker_monthly[k]; const tot = (m.pv1+m.pv2+m.pv3+m.pv4) || 1; return Math.round(m[s.key] / tot * 1000) / 10; }),
+          data: monthlySums.map(sums => { if (!sums) return null; const tot = (sums.pv1 + sums.pv2 + sums.pv3 + sums.pv4) || 1; return Math.round(sums[s.key] / tot * 1000) / 10; }),
           backgroundColor: s.color + 'cc', borderColor: s.color, borderWidth: 0.5, borderRadius: 2
         }))
       },
       options: {
         ...CHART_DEFAULTS,
         scales: { ...CHART_DEFAULTS.scales, x: { ...CHART_DEFAULTS.scales.x, stacked: true }, y: { ...CHART_DEFAULTS.scales.y, stacked: true, min: 0, max: 100, ticks: { ...CHART_DEFAULTS.scales.y.ticks, callback: v => v + '%' } } },
-        plugins: { ...CHART_DEFAULTS.plugins, legend: { display: true, labels: { color: '#7a8499', font: { family: 'DM Mono', size: 11 } } }, tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}%` } } }
+        plugins: { ...CHART_DEFAULTS.plugins, legend: { display: true, labels: { color: '#7a8499', font: { family: 'DM Mono', size: 11 } } }, tooltip: { callbacks: { label: ctx => ctx.parsed.y === null ? null : `${ctx.dataset.label}: ${ctx.parsed.y}%` } } }
       }
     });
   }
