@@ -228,6 +228,10 @@
     flex-shrink: 0;
   }
 
+  .legend-item.clickable { cursor: pointer; user-select: none; transition: opacity 0.15s, color 0.15s; }
+  .legend-item.clickable:hover { color: var(--text); }
+  .legend-item.off { opacity: 0.38; text-decoration: line-through; }
+
   .notice {
     font-size: 0.75rem;
     color: var(--text-muted);
@@ -345,12 +349,8 @@
     <div class="card">
       <div class="card-title" id="solarChartTitle">Solar Erzeugung & Nutzung – monatlich (kWh)</div>
       <div class="chart-wrap tall"><canvas id="chartSolar"></canvas></div>
-      <div class="legend-row">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--solar)"></div> Gesamte Erzeugung</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--eigenverbrauch)"></div> Genutzte Solar</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--wp)"></div> Netzimport</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--speicher)"></div> Speicher-Entladung</div>
-      </div>
+      <div class="legend-row" id="solarLegend"></div>
+      <div style="font-size:0.72rem;color:var(--text-muted);margin-top:6px;">Tipp: Auf die Legende klicken, um einzelne Werte aus-/einzublenden.</div>
     </div>
     <div class="grid-2">
       <div class="card">
@@ -692,6 +692,31 @@ function renderSolar() {
   renderPVStrings();
 }
 
+// Klickbare Legende: blendet einzelne Datenreihen aus/ein (Zustand pro Sitzung gemerkt)
+let solarLegendHidden = {};
+function buildClickableLegend(chartKey, containerId) {
+  const chart = charts[chartKey];
+  const cont = document.getElementById(containerId);
+  if (!chart || !cont) return;
+  cont.innerHTML = '';
+  chart.data.datasets.forEach((ds, i) => {
+    const hidden = !!solarLegendHidden[ds.label];
+    chart.setDatasetVisibility(i, !hidden);
+    const item = document.createElement('div');
+    item.className = 'legend-item clickable' + (hidden ? ' off' : '');
+    item.innerHTML = `<div class="legend-dot" style="background:${ds.borderColor}"></div> ${ds.label}`;
+    item.onclick = () => {
+      const nowVisible = chart.isDatasetVisible(i);
+      chart.setDatasetVisibility(i, !nowVisible);
+      solarLegendHidden[ds.label] = nowVisible;   // war sichtbar -> jetzt versteckt
+      item.classList.toggle('off', nowVisible);
+      chart.update();
+    };
+    cont.appendChild(item);
+  });
+  chart.update();
+}
+
 function renderSolarMonthly() {
   const am = DATA.anker_monthly;
   const keys = Object.keys(am).sort();
@@ -723,8 +748,9 @@ function renderSolarMonthly() {
         { label: 'Speicher', data: keys.map(k => am[k].speicher_entladung), backgroundColor: '#fb923c44', borderColor: '#fb923c', borderWidth: 1.5, borderRadius: 3 }
       ]
     },
-    options: { ...CHART_DEFAULTS, plugins: { ...CHART_DEFAULTS.plugins, legend: { display: true, labels: { color: '#7a8499', font: { family: 'DM Mono', size: 11 } } } } }
+    options: CHART_DEFAULTS
   });
+  buildClickableLegend('solar', 'solarLegend');
 
   destroyChart('solarQuote');
   charts['solarQuote'] = new Chart(document.getElementById('chartSolarQuote'), {
@@ -779,8 +805,9 @@ function renderSolarDaily() {
         { label: 'Speicher', data: daily.map(d => d.speicher_entladung), backgroundColor: '#fb923c44', borderColor: '#fb923c', borderWidth: 1, borderRadius: 2 }
       ]
     },
-    options: { ...CHART_DEFAULTS, plugins: { ...CHART_DEFAULTS.plugins, legend: { display: true, labels: { color: '#7a8499', font: { family: 'DM Mono', size: 11 } } } } }
+    options: CHART_DEFAULTS
   });
+  buildClickableLegend('solar', 'solarLegend');
 
   destroyChart('solarQuote');
   charts['solarQuote'] = new Chart(document.getElementById('chartSolarQuote'), {
