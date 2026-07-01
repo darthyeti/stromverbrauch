@@ -303,7 +303,7 @@
       <div class="legend-row">
         <div class="legend-item"><div class="legend-dot" style="background:var(--wp)"></div> Wärmepumpe</div>
         <div class="legend-item"><div class="legend-dot" style="background:var(--normal)"></div> Normal Strom</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--solar)"></div> Solar Erzeugung (Anker)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--solar)"></div> Solar genutzt (Anker)</div>
       </div>
     </div>
     <div class="grid-2">
@@ -577,22 +577,22 @@ function renderOverview() {
   const y25 = yearly['2025'];
   const y24 = yearly['2024'];
   const ankerMonthly = DATA.anker_monthly;
-  const solarTotal25 = Object.entries(ankerMonthly).filter(([k]) => k.startsWith('2025')).reduce((s, [,m]) => s + m.solar_gesamt, 0);
-  const solarTotal = Object.values(ankerMonthly).reduce((s, m) => s + m.solar_gesamt, 0);
+  const solarTotal25 = Object.entries(ankerMonthly).filter(([k]) => k.startsWith('2025')).reduce((s, [,m]) => s + m.genutzte_solar, 0);
+  const solarTotal = Object.values(ankerMonthly).reduce((s, m) => s + m.genutzte_solar, 0);
 
   const kpiEl = document.getElementById('kpi-overview');
   kpiEl.innerHTML = `
     <div class="kpi"><div class="kpi-label">WP 2025</div><div class="kpi-value wp">${y25.wp.toLocaleString('de')}</div><div class="kpi-sub">kWh · ${y25.wp < y24.wp ? '↓' : '↑'} ${Math.abs(y25.wp - y24.wp)} vs 2024</div></div>
     <div class="kpi"><div class="kpi-label">Normal 2025</div><div class="kpi-value normal">${y25.normal.toLocaleString('de')}</div><div class="kpi-sub">kWh · ${y25.normal < y24.normal ? '↓' : '↑'} ${Math.abs(y25.normal - y24.normal)} vs 2024</div></div>
     <div class="kpi"><div class="kpi-label">Gesamt 2025</div><div class="kpi-value green">${(y25.wp + y25.normal).toLocaleString('de')}</div><div class="kpi-sub">kWh Verbrauch</div></div>
-    <div class="kpi"><div class="kpi-label">Solar 2025</div><div class="kpi-value solar">${Math.round(solarTotal25).toLocaleString('de')}</div><div class="kpi-sub">kWh erzeugt (Anker)</div></div>
-    <div class="kpi"><div class="kpi-label">Solar gesamt</div><div class="kpi-value orange">${Math.round(solarTotal).toLocaleString('de')}</div><div class="kpi-sub">kWh seit Jun 2025</div></div>
+    <div class="kpi"><div class="kpi-label">Solar 2025</div><div class="kpi-value solar">${Math.round(solarTotal25).toLocaleString('de')}</div><div class="kpi-sub">kWh genutzt (Anker)</div></div>
+    <div class="kpi"><div class="kpi-label">Solar gesamt</div><div class="kpi-value orange">${Math.round(solarTotal).toLocaleString('de')}</div><div class="kpi-sub">kWh genutzt seit Jun 2025</div></div>
   `;
 
   const solarByYear = {};
   Object.entries(ankerMonthly).forEach(([key, m]) => {
     const yr = parseInt(key.split('-')[0]);
-    solarByYear[yr] = (solarByYear[yr] || 0) + m.solar_gesamt;
+    solarByYear[yr] = (solarByYear[yr] || 0) + m.genutzte_solar;
   });
 
   const labels = years.filter(y => y <= 2026);
@@ -605,7 +605,7 @@ function renderOverview() {
       datasets: [
         { label: 'Wärmepumpe', data: labels.map(y => yearly[y]?.wp || 0), backgroundColor: '#4e9eff33', borderColor: '#4e9eff', borderWidth: 1.5, borderRadius: 4 },
         { label: 'Normal Strom', data: labels.map(y => yearly[y]?.normal || 0), backgroundColor: '#a78bfa33', borderColor: '#a78bfa', borderWidth: 1.5, borderRadius: 4 },
-        { label: 'Solar', data: labels.map(y => Math.round(solarByYear[y] || 0)), backgroundColor: '#fbbf2433', borderColor: '#fbbf24', borderWidth: 1.5, borderRadius: 4 }
+        { label: 'Solar genutzt', data: labels.map(y => Math.round(solarByYear[y] || 0)), backgroundColor: '#fbbf2433', borderColor: '#fbbf24', borderWidth: 1.5, borderRadius: 4 }
       ]
     },
     options: { ...CHART_DEFAULTS, plugins: { ...CHART_DEFAULTS.plugins, legend: { display: true, labels: { color: '#7a8499', font: { family: 'DM Mono', size: 11 } } } } }
