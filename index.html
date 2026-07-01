@@ -323,9 +323,9 @@
     <div class="section-title">Monatlicher Verlauf</div>
     <div class="controls">
       <span class="control-label">Jahr vergleichen:</span>
-      <select id="selMonthYear1" onchange="renderMonthly()"><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
+      <select id="selMonthYear1" onchange="renderMonthly()"></select>
       <span class="control-label">vs.</span>
-      <select id="selMonthYear2" onchange="renderMonthly()"><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
+      <select id="selMonthYear2" onchange="renderMonthly()"></select>
     </div>
     <div class="card">
       <div class="card-title">Wärmepumpe – Monatsverbrauch (kWh)</div>
@@ -347,8 +347,10 @@
         <option value="monthly">Monatliche Übersicht</option>
         <option value="daily">Tageswerte nach Monat</option>
       </select>
+      <span class="control-label" id="labelSolarYear" style="display:none">Jahr:</span>
+      <select id="selSolarYear" onchange="onSolarYearChange()" style="display:none"></select>
       <span class="control-label" id="labelSolarMonth" style="display:none">Monat:</span>
-      <select id="selSolarMonth" onchange="renderSolar()" style="display:none"><option value="2025-05">Mai 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Aug 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Okt 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dez 2025</option><option value="2026-01">Jan 2026</option><option value="2026-02">Feb 2026</option><option value="2026-03">Mär 2026</option><option value="2026-04">Apr 2026</option><option value="2026-05">Mai 2026</option><option value="2025-05">Mai 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Aug 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Okt 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dez 2025</option><option value="2026-01">Jan 2026</option><option value="2026-02">Feb 2026</option><option value="2026-03">Mär 2026</option><option value="2026-04">Apr 2026</option><option value="2025-05">Mai 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Aug 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Okt 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dez 2025</option><option value="2026-01">Jan 2026</option><option value="2026-02">Feb 2026</option><option value="2026-03">Mär 2026</option><option value="2026-04">Apr 2026</option><option value="2026-05">Mai 2026</option><option value="2025-05">Mai 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Aug 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Okt 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dez 2025</option><option value="2026-01">Jan 2026</option><option value="2026-02">Feb 2026</option><option value="2026-03">Mär 2026</option><option value="2026-04">Apr 2026</option><option value="2026-05">Mai 2026</option><option value="2026-06">Jun 2026</option></select>
+      <select id="selSolarMonth" onchange="renderSolar()" style="display:none"></select>
     </div>
     <div class="kpi-row" id="kpi-solar">
     <div class="kpi"><div class="kpi-label">Ges. Erzeugung</div><div class="kpi-value solar">1.682</div><div class="kpi-sub">kWh seit Jun 2025</div></div>
@@ -398,9 +400,11 @@
             <option value="daily">Tageswerte je String</option>
           </select>
           <span class="control-label" id="labelPVYear" style="display: inline;">Jahr:</span>
-          <select id="selPVYear" onchange="renderPVStrings()" style="display: inline-block;"><option value="2025">2025</option><option value="2026">2026</option><option value="avg">Alle Jahre (Ø)</option></select>
+          <select id="selPVYear" onchange="renderPVStrings()" style="display: inline-block;"></select>
+          <span class="control-label" id="labelPVMonthYear" style="display:none">Jahr:</span>
+          <select id="selPVMonthYear" onchange="onPVDayYearChange()" style="display:none"></select>
           <span class="control-label" id="labelPVMonth" style="display:none">Monat:</span>
-          <select id="selPVMonth" onchange="renderPVStrings()" style="display:none"><option value="2025-05">Mai 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Aug 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Okt 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dez 2025</option><option value="2026-01">Jan 2026</option><option value="2026-02">Feb 2026</option><option value="2026-03">Mär 2026</option><option value="2026-04">Apr 2026</option><option value="2026-05">Mai 2026</option><option value="2026-06">Jun 2026</option></select>
+          <select id="selPVMonth" onchange="renderPVStrings()" style="display:none"></select>
         </div>
         <div class="card-title" id="pvChartTitle">Anteil je String pro Monat 2026 (%) – zeigt saisonale Verschiebung Wiese ↔ Wand</div>
         <div class="chart-wrap tall"><canvas id="chartPVStrings" width="1216" height="760" style="display: block; box-sizing: border-box; height: 380px; width: 608px;"></canvas></div>
@@ -425,9 +429,9 @@
       <div class="card-title">Monatliche Arbeitszahl – Jahresvergleich</div>
       <div class="controls">
         <span class="control-label">Jahr:</span>
-        <select id="selAZYear1" onchange="renderWP()"><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
+        <select id="selAZYear1" onchange="renderWP()"></select>
         <span class="control-label">vs.</span>
-        <select id="selAZYear2" onchange="renderWP()"><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select>
+        <select id="selAZYear2" onchange="renderWP()"></select>
       </div>
       <div class="chart-wrap"><canvas id="chartAZMonthly" width="2572" height="600" style="display: block; box-sizing: border-box; height: 300px; width: 1286px;"></canvas></div>
     </div>
@@ -650,10 +654,9 @@ function initMonthlySelects() {
   const years = [...new Set(DATA.monthly_strom.map(d => d.year))].sort();
   const s1 = document.getElementById('selMonthYear1');
   const s2 = document.getElementById('selMonthYear2');
-  years.forEach(y => {
-    s1.innerHTML += `<option value="${y}">${y}</option>`;
-    s2.innerHTML += `<option value="${y}">${y}</option>`;
-  });
+  const opts = years.map(y => `<option value="${y}">${y}</option>`).join('');
+  s1.innerHTML = opts;
+  s2.innerHTML = opts;
   s1.value = years[years.length - 2] || years[0];
   s2.value = years[years.length - 1];
 }
@@ -700,23 +703,44 @@ function renderMonthly() {
 // ===== SOLAR =====
 function initSolarSelects() {
   const months = Object.keys(DATA.anker_monthly).sort();
+  const years = [...new Set(months.map(m => m.split('-')[0]))].sort();
+  const yearSel = document.getElementById('selSolarYear');
+  yearSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+  if (years.length) yearSel.value = years[years.length - 1];
+  fillSolarMonths();
+}
+
+function fillSolarMonths() {
+  const yr = document.getElementById('selSolarYear').value;
   const sel = document.getElementById('selSolarMonth');
-  months.forEach(m => {
-    const [yr, mo] = m.split('-');
-    sel.innerHTML += `<option value="${m}">${MONTHS[parseInt(mo)-1]} ${yr}</option>`;
-  });
-  sel.value = months[months.length - 1];
+  const months = Object.keys(DATA.anker_monthly).filter(k => k.startsWith(yr + '-')).sort();
+  sel.innerHTML = months.map(m => {
+    const mo = m.split('-')[1];
+    return `<option value="${m}">${MONTHS[parseInt(mo)-1]}</option>`;
+  }).join('');
+  if (months.length) sel.value = months[months.length - 1];
+}
+
+function onSolarYearChange() {
+  fillSolarMonths();
+  renderSolar();
 }
 
 function renderSolar() {
   const mode = document.getElementById('selSolarMode').value;
+  const yearSel = document.getElementById('selSolarYear');
+  const yearLabel = document.getElementById('labelSolarYear');
   const monthSel = document.getElementById('selSolarMonth');
   const monthLabel = document.getElementById('labelSolarMonth');
   if (mode === 'daily') {
+    yearSel.style.display = 'inline-block';
+    yearLabel.style.display = 'inline';
     monthSel.style.display = 'inline-block';
     monthLabel.style.display = 'inline';
     renderSolarDaily();
   } else {
+    yearSel.style.display = 'none';
+    yearLabel.style.display = 'none';
     monthSel.style.display = 'none';
     monthLabel.style.display = 'none';
     renderSolarMonthly();
@@ -873,24 +897,42 @@ function pvMonthsWithData() {
 }
 
 function initPVSelects() {
-  const sel = document.getElementById('selPVMonth');
-  if (!sel) return;
   const months = pvMonthsWithData();
-  sel.innerHTML = '';
-  months.forEach(m => {
-    const [yr, mo] = m.split('-');
-    sel.innerHTML += `<option value="${m}">${MONTHS[parseInt(mo)-1]} ${yr}</option>`;
-  });
-  if (months.length) sel.value = months[months.length - 1];
+  const years = [...new Set(months.map(m => m.split('-')[0]))].sort();
 
   // Jahr-Auswahl fuer den Jahresverlauf (Jan–Dez) + Option "Alle Jahre (Ø)"
   const yearSel = document.getElementById('selPVYear');
   if (yearSel) {
-    const years = [...new Set(months.map(m => m.split('-')[0]))].sort();
     yearSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('') +
       `<option value="avg">Alle Jahre (Ø)</option>`;
     if (years.length) yearSel.value = years[years.length - 1];   // Default: aktuellstes Jahr
   }
+
+  // Jahr-Auswahl fuer die Tagesansicht (ohne "Alle Jahre")
+  const dayYearSel = document.getElementById('selPVMonthYear');
+  if (dayYearSel) {
+    dayYearSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+    if (years.length) dayYearSel.value = years[years.length - 1];
+  }
+  fillPVMonths();
+}
+
+function fillPVMonths() {
+  const sel = document.getElementById('selPVMonth');
+  const dayYearSel = document.getElementById('selPVMonthYear');
+  if (!sel || !dayYearSel) return;
+  const yr = dayYearSel.value;
+  const months = pvMonthsWithData().filter(k => k.startsWith(yr + '-'));
+  sel.innerHTML = months.map(m => {
+    const mo = m.split('-')[1];
+    return `<option value="${m}">${MONTHS[parseInt(mo)-1]}</option>`;
+  }).join('');
+  if (months.length) sel.value = months[months.length - 1];
+}
+
+function onPVDayYearChange() {
+  fillPVMonths();
+  renderPVStrings();
 }
 
 function renderPVStrings() {
@@ -953,13 +995,17 @@ function renderPVStrings() {
   const monthLabel = document.getElementById('labelPVMonth');
   const yearSel = document.getElementById('selPVYear');
   const yearLabel = document.getElementById('labelPVYear');
+  const dayYearSel = document.getElementById('selPVMonthYear');
+  const dayYearLabel = document.getElementById('labelPVMonthYear');
 
   if (mode === 'daily') {
     yearSel.style.display = 'none';
     yearLabel.style.display = 'none';
+    dayYearSel.style.display = 'inline-block';
+    dayYearLabel.style.display = 'inline';
     monthSel.style.display = 'inline-block';
     monthLabel.style.display = 'inline';
-    if (!monthSel.value || !keys.includes(monthSel.value)) monthSel.value = keys[keys.length - 1];
+    if (!monthSel.value || !keys.includes(monthSel.value)) fillPVMonths();
     const monthKey = monthSel.value;
     const [yr, mo] = monthKey.split('-');
     const daily = DATA.anker_daily.filter(d => d.year === parseInt(yr) && d.month === parseInt(mo) && d.pv1 !== undefined);
@@ -979,6 +1025,8 @@ function renderPVStrings() {
     // Jahresverlauf: feste Jan–Dez-Achse; gewaehltes Jahr oder Durchschnitt aller Jahre
     monthSel.style.display = 'none';
     monthLabel.style.display = 'none';
+    dayYearSel.style.display = 'none';
+    dayYearLabel.style.display = 'none';
     yearSel.style.display = 'inline-block';
     yearLabel.style.display = 'inline';
     const sel = yearSel.value || (yearSel.options[0] && yearSel.options[0].value);
@@ -1023,10 +1071,9 @@ function initWPSelects() {
   const years = [...new Set(DATA.monthly_az.map(d => d.year))].sort();
   const s1 = document.getElementById('selAZYear1');
   const s2 = document.getElementById('selAZYear2');
-  years.forEach(y => {
-    s1.innerHTML += `<option value="${y}">${y}</option>`;
-    s2.innerHTML += `<option value="${y}">${y}</option>`;
-  });
+  const opts = years.map(y => `<option value="${y}">${y}</option>`).join('');
+  s1.innerHTML = opts;
+  s2.innerHTML = opts;
   s1.value = years[years.length - 2] || years[0];
   s2.value = years[years.length - 1];
 }
@@ -1294,7 +1341,10 @@ function addStromEntry() {
     // First entry ever – just store as reference stand, no diff possible
     const stand = { year, month, wp: wpStand, wpE: wpEnergie, normal: normalStand };
     if (!DATA._stands) DATA._stands = [];
+    DATA._stands = DATA._stands.filter(s => !(s.year === year && s.month === month));
     DATA._stands.push(stand);
+    pendingStrom = pendingStrom.filter(p => !(p.year === year && p.month === month));
+    pendingAZ = pendingAZ.filter(p => !(p.year === year && p.month === month));
     pendingStrom.push({ year, month, wp: 0, normal: 0, _stand: stand });
     pendingAZ.push({ year, month, az: null, wp_strom: 0, wp_energie: 0 });
     showMsg('editMsg', `Zählerstand für ${MONTHS[month-1]} ${year} als Referenz gespeichert. Nächsten Monat wird die Zunahme berechnet.`, 'ok');
@@ -1330,8 +1380,11 @@ function addStromEntry() {
   const stand = { year, month, wp: wpStand, wpE: wpEnergie, normal: normalStand };
 
   if (!DATA._stands) DATA._stands = [];
+  DATA._stands = DATA._stands.filter(s => !(s.year === year && s.month === month));
   DATA._stands.push(stand);
 
+  pendingStrom = pendingStrom.filter(p => !(p.year === year && p.month === month));
+  pendingAZ = pendingAZ.filter(p => !(p.year === year && p.month === month));
   pendingStrom.push({ year, month, wp: wpDiffFinal, normal: normalDiff, _stand: stand });
   pendingAZ.push({ year, month, az, wp_strom: wpDiffFinal, wp_energie: wpEDiff });
 
@@ -1497,25 +1550,31 @@ function showMsg(id, text, type) {
 let fileHandle = null;
 
 function buildUpdatedHTML() {
-  // Merge pending into DATA first
+  // Merge pending into DATA (idempotent: vorhandenen Monat ersetzen, nie doppelt anhaengen)
   pendingStrom.forEach(p => {
     if (p.wp > 0 || p.normal > 0) {
+      DATA.monthly_strom = DATA.monthly_strom.filter(e => !(e.year === p.year && e.month === p.month));
       DATA.monthly_strom.push({ year: p.year, month: p.month, wp: p.wp, normal: p.normal });
-      const key = String(p.year);
-      if (!DATA.yearly[key]) DATA.yearly[key] = { wp: 0, normal: 0 };
-      DATA.yearly[key].wp += p.wp;
-      DATA.yearly[key].normal += p.normal;
     }
     if (p._stand) {
       if (!DATA._stands) DATA._stands = [];
-      // Avoid duplicate stand
-      if (!DATA._stands.find(s => s.year === p._stand.year && s.month === p._stand.month)) {
-        DATA._stands.push(p._stand);
-      }
+      DATA._stands = DATA._stands.filter(s => !(s.year === p._stand.year && s.month === p._stand.month));
+      DATA._stands.push(p._stand);
     }
   });
   pendingAZ.forEach(p => {
-    if (p.az !== null) DATA.monthly_az.push({ year: p.year, month: p.month, az: p.az, wp_strom: p.wp_strom, wp_energie: p.wp_energie });
+    if (p.az !== null) {
+      DATA.monthly_az = DATA.monthly_az.filter(e => !(e.year === p.year && e.month === p.month));
+      DATA.monthly_az.push({ year: p.year, month: p.month, az: p.az, wp_strom: p.wp_strom, wp_energie: p.wp_energie });
+    }
+  });
+  // yearly der betroffenen Jahre aus monthly_strom neu berechnen (idempotent, nie doppelt gezaehlt)
+  [...new Set(pendingStrom.map(p => p.year))].forEach(yr => {
+    const rows = DATA.monthly_strom.filter(e => e.year === yr);
+    DATA.yearly[String(yr)] = {
+      wp: rows.reduce((s, e) => s + e.wp, 0),
+      normal: rows.reduce((s, e) => s + e.normal, 0)
+    };
   });
 
   const currentHTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
